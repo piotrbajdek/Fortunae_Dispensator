@@ -21,13 +21,12 @@ YOU ACKNOWLEDGE THAT THIS SOFTWARE IS NOT DESIGNED, LICENSED OR INTENDED FOR USE
 ]]
 
 -- Wejściowe parametry
-efektywnosc = 0.9 -- Dobre inwestycje / złe inwestycje
+efektywnosc = 0.8 -- Dobre inwestycje / złe inwestycje
 ratio = 0.5 -- Średni zysk / średnia strata
 liczba_inwestycji = 108
 poczatkowy_kapital = 10000
 inwestycji_rocznie = 36
 prawdopodobienstwo_zysku = 0.95
-koszta_transakcyjne = 0.01
 podatek = 0.19
 waluta = "PLN"
 
@@ -36,13 +35,11 @@ waluta = "PLN"
 sukces = 1 - prawdopodobienstwo_zysku
 netto = 1 - podatek
 
--- Krok 1: Obliczenie oczekiwanej stopy zwrotu z uwzględnieniem kosztów transakcyjnych
-oczekiwana_stopa_zwrotu = efektywnosc * (ratio * (1 - koszta_transakcyjne))
-	- (1 - efektywnosc) * (1 + koszta_transakcyjne)
+-- Krok 1: Obliczenie oczekiwanej stopy zwrotu
+oczekiwana_stopa_zwrotu = ((ratio * efektywnosc) - (1 - efektywnosc)) / ratio
 
--- Krok 2: Obliczenie odchylenia standardowego z uwzględnieniem kosztów transakcyjnych
-odchylenie_standardowe =
-	math.sqrt(efektywnosc * (ratio * (1 - koszta_transakcyjne)) ^ 2 + (1 - efektywnosc) * (1 + koszta_transakcyjne) ^ 2)
+-- Krok 2: Obliczenie odchylenia standardowego
+odchylenie_standardowe = math.sqrt((efektywnosc * ratio) ^ 2 + (1 - efektywnosc) ^ 2)
 
 -- Krok 3: Zastosowanie nierówności Chernoffa
 epsilon = -1 -- Chcemy, aby końcowy kapitał był większy niż początkowy
@@ -54,8 +51,7 @@ maksymalny_procent_kapitalu = mu * epsilon / (liczba_inwestycji * math.log(sukce
 koncowa_wartosc_kapitalu = poczatkowy_kapital
 for i = 1, liczba_inwestycji do
 	kwota_inwestycji = koncowa_wartosc_kapitalu * maksymalny_procent_kapitalu
-	wynik_inwestycji = (efektywnosc * ratio * (1 - koszta_transakcyjne))
-		- ((1 - efektywnosc) * (1 + koszta_transakcyjne))
+	wynik_inwestycji = oczekiwana_stopa_zwrotu
 	koncowa_wartosc_kapitalu = koncowa_wartosc_kapitalu + kwota_inwestycji * wynik_inwestycji
 
 	-- Pomniejszanie kapitału o podatek (co roku)

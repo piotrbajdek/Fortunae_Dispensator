@@ -21,13 +21,12 @@ YOU ACKNOWLEDGE THAT THIS SOFTWARE IS NOT DESIGNED, LICENSED OR INTENDED FOR USE
 ]]
 
 -- Parámetros de entrada
-eficiencia = 0.9 -- Buenas inversiones / malas inversiones
+eficiencia = 0.8 -- Buenas inversiones / malas inversiones
 ratio = 0.5 -- Ganancia promedio / pérdida promedio
 numero_de_inversiones = 108
 capital_inicial = 10000
 inversiones_anuales = 36
 probabilidad_de_ganancia = 0.95
-costos_de_transaccion = 0.01
 impuesto = 0.19
 moneda = "EUR"
 
@@ -36,18 +35,15 @@ moneda = "EUR"
 fracaso = 1 - probabilidad_de_ganancia
 neto = 1 - impuesto
 
--- Paso 1: Calcular la tasa de retorno esperada considerando los costos de transacción
-tasa_retorno_esperada = eficiencia * (ratio * (1 - costos_de_transaccion))
-	- (1 - eficiencia) * (1 + costos_de_transaccion)
+-- Paso 1: Calcular la tasa de retorno esperada
+tasa_de_retorno_esperada = ((ratio * eficiencia) - (1 - eficiencia)) / ratio
 
--- Paso 2: Calcular la desviación estándar considerando los costos de transacción
-desviacion_estandar = math.sqrt(
-	eficiencia * (ratio * (1 - costos_de_transaccion)) ^ 2 + (1 - eficiencia) * (1 + costos_de_transaccion) ^ 2
-)
+-- Paso 2: Calcular la desviación estándar
+desviacion_estandar = math.sqrt((eficiencia * ratio) ^ 2 + (1 - eficiencia) ^ 2)
 
 -- Paso 3: Aplicar la desigualdad de Chernoff
 epsilon = -1 -- Queremos que el capital final sea mayor que el inicial
-mu = numero_de_inversiones * tasa_retorno_esperada
+mu = numero_de_inversiones * tasa_de_retorno_esperada
 probabilidad_exito = math.exp(-mu * epsilon ^ 2 / 3)
 porcentaje_maximo_capital = mu * epsilon / (numero_de_inversiones * math.log(fracaso))
 
@@ -55,8 +51,7 @@ porcentaje_maximo_capital = mu * epsilon / (numero_de_inversiones * math.log(fra
 valor_final_capital = capital_inicial
 for i = 1, numero_de_inversiones do
 	monto_inversion = valor_final_capital * porcentaje_maximo_capital
-	resultado_inversion = (eficiencia * ratio * (1 - costos_de_transaccion))
-		- ((1 - eficiencia) * (1 + costos_de_transaccion))
+	resultado_inversion = tasa_de_retorno_esperada
 	valor_final_capital = valor_final_capital + monto_inversion * resultado_inversion
 
 	-- Disminuir el capital por impuestos (anualmente)

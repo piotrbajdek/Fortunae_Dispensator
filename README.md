@@ -1,3 +1,5 @@
+![example-1](https://github.com/piotrbajdek/Fortunae_Dispensator/blob/main/docs/images/example-1.png?raw=true)
+
 ## POLSKI
 
 Fortunae Dispensator ([fortunae_dispensator_pl.lua](https://github.com/piotrbajdek/Fortunae_Dispensator/blob/main/fortunae_dispensator_pl.lua)) to skrypt napisany w języku Lua, który wykorzystuje modele matematyczne i teorię prawdopodobieństwa w celu wsparcia inwestorów w optymalnej alokacji kapitału. Po wprowadzeniu kluczowych parametrów, takich jak efektywność inwestycji, średnie zyski/straty, liczba inwestycji, początkowy kapitał oraz pożądane prawdopodobieństwo sukcesu, program oblicza maksymalny procent kapitału, który powinien być ryzykowany przy każdej inwestycji.

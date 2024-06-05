@@ -1,3 +1,5 @@
+## FORTUNAE DISPENSATOR
+
 ![example-1](https://github.com/piotrbajdek/Fortunae_Dispensator/blob/main/docs/images/example-1.png?raw=true)
 
 ## POLSKI
